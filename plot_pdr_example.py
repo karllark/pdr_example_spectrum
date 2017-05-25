@@ -69,6 +69,9 @@ if __name__ == '__main__':
                           format='ascii.commented_header',
                           header_start=-1)
 
+    dust_data = Table.read('data/DIRTY_bm1_neqgrain_tau_001.00_theta_090_global_lum.table.fits')
+    print(dust_data.colnames)
+
     xsize = 11.0
     ysize = 11.0
     fig, ax = plt.subplots(nrows=5,figsize=(xsize,ysize), sharex=True)
@@ -79,24 +82,37 @@ if __name__ == '__main__':
 
     ax[0].plot(cloudy_data['wave'], cloudy_data['diffuse_spec'], 'k-')
     ax[0].set_xscale('log')
-    ax[0].set_xlim(0.7,29.0)
+    ax[0].set_xlim(1.0,29.0)
     ax[0].set_yscale(ptype)
     ax[0].set_ylim(1e-3,50)
 
-    ax[1].plot(pdr_data_nir['wave'], pdr_data_nir['atomic_pdr'],'k-')
-    ax[1].plot(pdr_data_mir['wave'], pdr_data_mir['atomic_pdr'],'k-')
+    ax[1].plot(pdr_data_nir['wave'], pdr_data_nir['atomic_pdr'], 'k-')
+    ax[1].plot(pdr_data_mir['wave'], pdr_data_mir['atomic_pdr'], 'k-')
     ax[1].set_yscale(ptype)
     ax[1].set_ylim(1e-4,0.04)
 
-    ax[2].plot(pdr_data_nir['wave'], pdr_data_nir['mol_pdr'],'k-')
-    ax[2].plot(pdr_data_mir['wave'], pdr_data_mir['mol_pdr'],'k-')
+    ax[2].plot(pdr_data_nir['wave'], pdr_data_nir['mol_pdr'], 'k-')
+    ax[2].plot(pdr_data_mir['wave'], pdr_data_mir['mol_pdr'], 'k-')
     ax[2].set_yscale(ptype)
     ax[2].set_ylim(1e-4,0.08)
 
-    ax[3].plot(pah_data['wave'], pah_data['pah_spec'],'k-')
+    ax[3].plot(pah_data['wave'], pah_data['pah_spec'], 'k-')
     ax[3].set_yscale(ptype)
     ax[3].set_ylim(1e-2,1e3)
 
+    ax[4].plot(dust_data['wavelength'],
+               dust_data['wavelength']*(dust_data['Flux_rt_s']
+                                        + dust_data['Flux_de_d_1']), 'k-')
+    ax[4].plot(dust_data['wavelength'],
+               dust_data['wavelength']*dust_data['Flux_rt_s'], 'k--')
+    ax[4].plot(dust_data['wavelength'],
+               dust_data['wavelength']*dust_data['Flux_de_d_1'], 'k:')
+    ax[4].plot(dust_data['wavelength'],
+               dust_data['wavelength']*dust_data['Flux_de_d_3'], 'k-.')
+    ax[4].plot(dust_data['wavelength'],
+               dust_data['wavelength']*dust_data['Flux_de_d_5'], 'k:')
+    ax[4].set_yscale('log')
+    ax[4].set_ylim(1e35,2e37)
     ax[4].set_xlabel('wavelength [$\mu$m]')
 
     fig.tight_layout(h_pad=0.15)
